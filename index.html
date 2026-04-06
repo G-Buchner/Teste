@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ashfall - Ficha de Personagem</title>
+
+<meta name="theme-color" content="#050505">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ashfall RPG">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzA1MDUwNSIvPjx0ZXh0IHg9IjUwIiB5PSI2NSIgZm9udC1zaXplPSI1MCIgZm9udC1mYW1pbHk9InNlcmlmIiBmaWxsPSIjNDc4YmYxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7imZQ8L3RleHQ+PC9zdmc+">
+<link rel="manifest" id="manifest-link" href="blob:null/42635790-7a72-4b91-a0d6-2c001706b29d">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script><style type="text/css" id="operaUserStyle"></style>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+  /* CORES BASE / AZUL (Padrão) */
+  :root {
+    --ash: #4f6f99; --ember: #478bf1; --ember-glow: rgba(71, 139, 241, 0.4);
+    --ember-dim: #08697a; --gold: #4387c7; --gold-glow: rgba(67, 135, 199, 0.3);
+    --gold-dim: #1a119e; --parchment: #f2ead8; --parchment-dark: #d9ccb0;
+    --smoke: #2d90a8; --dot-full: #0a5cc8; --dot-empty: rgba(255,255,255,0.05);
+    --bg-panel: rgba(20, 18, 16, 0.85);
+  }
+
+  /* TEMAS ALTERNATIVOS */
+  body[data-theme="red"] { --ember: #e03131; --ember-glow: rgba(224, 49, 49, 0.4); --ember-dim: #8b0000; --gold: #ff8787; --gold-glow: rgba(255, 135, 135, 0.3); --gold-dim: #5c0000; --smoke: #c92a2a; --dot-full: #c92a2a; }
+  body[data-theme="orange"] { --ember: #fd7e14; --ember-glow: rgba(253, 126, 20, 0.4); --ember-dim: #a64200; --gold: #ffd8a8; --gold-glow: rgba(255, 216, 168, 0.3); --gold-dim: #6b2a00; --smoke: #e8590c; --dot-full: #e8590c; }
+  body[data-theme="green"] { --ember: #2f9e44; --ember-glow: rgba(47, 158, 68, 0.4); --ember-dim: #0b7226; --gold: #b2f2bb; --gold-glow: rgba(178, 242, 187, 0.3); --gold-dim: #054115; --smoke: #2b8a3e; --dot-full: #2b8a3e; }
+  body[data-theme="purple"] { --ember: #9c36b5; --ember-glow: rgba(156, 54, 181, 0.4); --ember-dim: #5c0e7a; --gold: #eebefa; --gold-glow: rgba(238, 190, 250, 0.3); --gold-dim: #3b0652; --smoke: #862e9c; --dot-full: #862e9c; }
+  body[data-theme="yellow"] { --ember: #f59f00; --ember-glow: rgba(245, 159, 0, 0.4); --ember-dim: #9e6f00; --gold: #ffec99; --gold-glow: rgba(255, 236, 153, 0.3); --gold-dim: #6b4a00; --smoke: #f08c00; --dot-full: #f08c00; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Crimson Text', Georgia, serif; background-color: #050505; background-image: radial-gradient(circle at top, #141a21 0%, #050505 80%); color: var(--parchment); min-height: 100vh; overflow-x: hidden; transition: all 0.5s ease; }
+  .sheet { padding: 10px; position: relative; }
+  .content { position: relative; z-index: 1; padding: 25px; max-width: 900px; margin: 20px auto; background: var(--bg-panel); border: 1px solid rgba(8, 105, 122, 0.3); border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+
+  /* SELETOR DE TEMAS */
+  .theme-selector { display: flex; justify-content: center; gap: 12px; margin-bottom: 25px; }
+  .theme-btn { width: 18px; height: 18px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s, border-color 0.2s; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
+  .theme-btn:hover { transform: scale(1.2); } .theme-btn.active { border-color: var(--parchment); transform: scale(1.2); }
+  .btn-blue { background: #478bf1; } .btn-red { background: #e03131; } .btn-orange { background: #fd7e14; } .btn-green { background: #2f9e44; } .btn-purple { background: #9c36b5; } .btn-yellow { background: #f59f00; }
+
+  /* HEADER */
+  .header { text-align: center; border-bottom: 1px solid var(--ember-dim); padding-bottom: 20px; margin-bottom: 25px; position: relative; transition: border-color 0.5s; }
+  .header::before, .header::after { content: ''; position: absolute; bottom: -2px; width: 30%; height: 1px; background: var(--gold-dim); transition: background 0.5s; }
+  .header::before { left: 0; } .header::after { right: 0; }
+  .header-title { font-family: 'Cinzel', serif; font-size: clamp(24px, 6vw, 36px); font-weight: 700; letter-spacing: 8px; color: var(--ember); text-shadow: 0 0 15px var(--ember-glow); margin-bottom: 5px; transition: color 0.5s, text-shadow 0.5s; }
+  .header-subtitle { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 4px; color: var(--smoke); text-transform: uppercase; transition: color 0.5s; }
+
+  /* TOP SECTION */
+  .top-section { display: flex; flex-direction: column; gap: 20px; margin-bottom: 20px; }
+  .portrait-container { width: 200px; aspect-ratio: 3/4; border: 1px solid rgba(8, 105, 122, 0.5); border-radius: 4px; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; position: relative; margin: 0 auto; transition: all 0.2s; }
+  .portrait-container:hover { border-color: var(--ember); box-shadow: 0 0 15px var(--ember-glow); }
+  .portrait-preview { width: 100%; height: 100%; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; transition: filter 0.2s; }
+  .portrait-container:hover .portrait-preview { filter: brightness(1.1); }
+  .portrait-placeholder { font-family: 'Cinzel', serif; font-size: 10px; color: var(--smoke); text-align: center; text-transform: uppercase; letter-spacing: 2px; line-height: 1.6; pointer-events: none; }
+  
+  /* BOTÃO DE REMOVER RETRATO */
+  .btn-remove-portrait {
+    position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: var(--parchment);
+    width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; z-index: 10; cursor: pointer; transition: all 0.2s; border: 1px solid var(--smoke);
+  }
+  .btn-remove-portrait:hover { background: #ff3333; border-color: #ff3333; color: white; transform: scale(1.1); }
+
+  /* MODAL DO CROPPER */
+  .crop-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
+  .crop-container { width: 100%; max-width: 500px; height: 60vh; background: #111; border: 1px solid var(--ember-dim); }
+  .crop-actions { display: flex; gap: 15px; margin-top: 20px; }
+  .btn-crop { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; padding: 10px 20px; cursor: pointer; border-radius: 4px; transition: all 0.2s; border: 1px solid; }
+  .btn-crop-cancel { background: transparent; color: var(--smoke); border-color: var(--smoke); } .btn-crop-cancel:hover { background: rgba(255,255,255,0.1); }
+  .btn-crop-save { background: rgba(0,0,0,0.3); color: var(--ember); border-color: var(--ember); box-shadow: 0 0 10px var(--ember-glow); } .btn-crop-save:hover { background: rgba(255,255,255,0.1); box-shadow: 0 0 20px var(--ember-glow); }
+
+  /* FIELDS & GRIDS */
+  .field { border-bottom: 1px solid rgba(45, 144, 168, 0.3); padding-bottom: 5px; margin-bottom: 5px; }
+  .field-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; display: block; margin-bottom: 4px; transition: color 0.5s; }
+  [contenteditable="true"] { outline: none; min-height: 22px; border-bottom: 1px dashed transparent; transition: all 0.2s ease; padding: 2px 4px; border-radius: 3px 3px 0 0; }
+  [contenteditable="true"]:hover { border-bottom: 1px dashed var(--smoke); }
+  [contenteditable="true"]:focus { border-bottom: 1px solid var(--ember); background: rgba(255, 255, 255, 0.05); }
+  .field-value { font-size: 15px; color: var(--parchment-dark); }
+  .identity-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+  .status-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 20px; }
+  .attrs-grid, .skills-grid { display: grid; grid-template-columns: 1fr; gap: 15px; border: 1px solid var(--ember-dim); border-radius: 4px; overflow: hidden; transition: border-color 0.5s; }
+
+  @media (min-width: 768px) {
+    .top-section { flex-direction: row; align-items: stretch; } .portrait-container { margin: 0; flex-shrink: 0; }
+    .identity-grid { grid-template-columns: 1fr 1fr; flex: 1; align-content: space-between; }
+    .status-grid { grid-template-columns: 1fr 1fr; }
+    .attrs-grid, .skills-grid { grid-template-columns: 1fr 1fr 1fr; gap: 0; }
+    .attr-col, .skill-col { border-right: 1px solid var(--ember-dim); border-bottom: none !important; } .attr-col:last-child, .skill-col:last-child { border-right: none; }
+  }
+
+  /* HEADERS, DOTS & COLUMNS */
+  .section-header { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 3px; color: var(--ember); text-transform: uppercase; border-top: 1px solid var(--ember-dim); border-bottom: 1px solid var(--ember-dim); background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%); padding: 8px 10px; margin: 30px 0 15px; display: flex; align-items: center; gap: 10px; transition: color 0.5s, border-color 0.5s; }
+  .section-desc { font-style: italic; font-size: 12px; color: var(--smoke); margin: -5px 0 15px 5px; opacity: 0.8; transition: color 0.5s; }
+  .xp-row { display: flex; align-items: center; gap: 8px; padding-top: 4px; }
+  .dots { display: inline-flex; gap: 6px; align-items: center; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--smoke); background: var(--dot-empty); cursor: pointer; transition: all 0.2s; }
+  .dot.filled { background: var(--dot-full); border-color: var(--ember); box-shadow: 0 0 6px var(--ember-glow); } .dot:hover { border-color: var(--gold); transform: scale(1.1); }
+  .dots-sm .dot { width: 10px; height: 10px; }
+  .attr-col, .skill-col { padding: 15px; border-bottom: 1px solid var(--ember-dim); background: rgba(0,0,0,0.2); transition: border-color 0.5s; }
+  .attr-col:last-child, .skill-col:last-child { border-bottom: none; }
+  .attr-col-title, .skill-col-title { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; text-align: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--gold-dim); text-shadow: 0 0 5px var(--gold-glow); transition: color 0.5s, border-color 0.5s; }
+  .attr-row, .skill-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 4px 5px; border-radius: 3px; transition: background 0.2s; }
+  .attr-row:hover, .skill-row:hover { background: rgba(255,255,255,0.03); } .attr-name, .skill-name { font-size: 14px; color: var(--parchment-dark); flex: 1; }
+
+  /* SINAIS & STATUS */
+  .sinal-row { display: flex; align-items: center; margin-bottom: 12px; gap: 10px; flex-wrap: wrap; } .sinal-name-area { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 200px; } .sinal-bullet { color: var(--ember); font-size: 14px; text-shadow: 0 0 5px var(--ember); transition: color 0.5s; } .sinal-label { font-family: 'Cinzel', serif; font-size: 12px; color: var(--gold); letter-spacing: 1px; min-width: 150px; flex: 1; transition: color 0.5s; }
+  .status-block { border: 1px solid rgba(8, 105, 122, 0.5); padding: 15px; border-radius: 4px; background: rgba(0,0,0,0.3); } .status-title { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; color: var(--ember); text-transform: uppercase; margin-bottom: 10px; transition: color 0.5s; } .status-dots { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .status-dot { width: 26px; height: 26px; border: 1px solid var(--smoke); background: rgba(0,0,0,0.5); cursor: pointer; transition: all 0.2s; border-radius: 2px; display: flex; align-items: center; justify-content: center; } .status-dot:hover { border-color: var(--parchment); } .status-dot.dmg { background: rgba(200,82,10,0.6); border-color: #ff7b00; box-shadow: 0 0 8px rgba(200,82,10,0.4); } .status-dot.agg { background: #8b0000; border-color: #ff3333; box-shadow: inset 0 0 10px black; } .status-dot.agg::after { content: '✕'; color: white; font-size: 16px; font-weight: bold; }
+  .manto-container { border: 1px solid rgba(8, 105, 122, 0.5); padding: 15px; margin-bottom: 20px; border-radius: 4px; background: rgba(20,0,0,0.2); } .manto-dot { width: 100%; max-width: 35px; height: 20px; border: 1px solid var(--smoke); background: rgba(0,0,0,0.5); cursor: pointer; transition: all 0.3s; border-radius: 2px; flex: 1; } .manto-dot.filled { background: linear-gradient(135deg, #4a0000, #800000); border-color: #ff3333; box-shadow: 0 0 10px rgba(128,0,0,0.5); }
+
+  /* GEAR, ITEMS & MERITS */
+  .gear-block, .merit-block { border: 1px solid rgba(8, 105, 122, 0.5); padding: 15px; margin-bottom: 15px; border-radius: 4px; background: rgba(0,0,0,0.2); } .gear-row { display: flex; flex-wrap: wrap; align-items: baseline; margin-bottom: 12px; gap: 10px; border-bottom: 1px solid rgba(107,94,78,0.2); padding-bottom: 8px; } .gear-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; } .gear-label { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 1px; color: var(--gold); min-width: 140px; transition: color 0.5s; } .gear-value { font-size: 15px; color: var(--parchment); flex: 1; min-width: 200px; } .gear-stat { font-size: 13px; color: var(--smoke); white-space: nowrap; display: flex; align-items: baseline; gap: 5px; transition: color 0.5s;}
+  .items-list { list-style: none; padding-left: 5px; margin-top: 10px; } .items-list li { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 14px; } .items-list li::before { content: '◆'; color: var(--ember); font-size: 10px; text-shadow: 0 0 5px var(--ember); transition: color 0.5s; }
+  .btn-add { background: none; border: 1px dashed var(--ember-dim); color: var(--smoke); font-size: 10px; padding: 6px 12px; cursor: pointer; border-radius: 3px; font-family: 'Cinzel', serif; letter-spacing: 1px; transition: all 0.2s; text-transform: uppercase; display: inline-block; margin-top: 5px; } .btn-add:hover { border-color: var(--ember); color: var(--ember); background: rgba(255,255,255,0.05); } .btn-del { color: rgba(200, 82, 10, 0.5); cursor: pointer; margin-left: 10px; font-size: 12px; transition: color 0.2s; padding: 0 4px; } .btn-del:hover { color: #ff3333; }
+  .merit-quote { font-style: italic; font-size: 13px; color: var(--smoke); text-align: center; margin-bottom: 15px; border-left: 2px solid var(--ember); border-right: 2px solid var(--ember); padding: 0 10px; transition: color 0.5s, border-color 0.5s; } .merit-row { margin-bottom: 15px; } .merit-type { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; color: var(--gold); display: block; margin-bottom: 5px; transition: color 0.5s; } .merit-value { font-size: 15px; color: var(--parchment); min-height: 24px; display: block; } .ornament { text-align: center; color: var(--gold-dim); font-size: 18px; letter-spacing: 15px; margin: 15px 0; opacity: 0.7; transition: color 0.5s; }
+
+  /* EXPORT/IMPORT BUTTONS */
+  .actions-container { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; margin-bottom: 20px; }
+  .btn-action { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 10px 15px; cursor: pointer; border-radius: 4px; transition: all 0.2s; background: rgba(0,0,0,0.4); color: var(--parchment); border: 1px solid var(--ember-dim); }
+  .btn-action:hover { background: rgba(255,255,255,0.05); border-color: var(--ember); box-shadow: 0 0 10px var(--ember-glow); }
+  .btn-html { background: rgba(67, 135, 199, 0.1); border-color: var(--gold); color: var(--gold); font-weight: bold; }
+  .btn-html:hover { background: rgba(67, 135, 199, 0.3); box-shadow: 0 0 15px var(--gold-glow); }
+  .btn-pwa { background: rgba(47, 158, 68, 0.1); border-color: #2f9e44; color: #b2f2bb; font-weight: bold; display: none; }
+  .btn-pwa:hover { background: rgba(47, 158, 68, 0.3); box-shadow: 0 0 15px rgba(47, 158, 68, 0.5); }
+</style>
+</head>
+<body data-theme="yellow">
+
+<div id="embedded-data" style="display:none;">eyJpZF9ub21lIjoiIiwiaWRfbGluaGFnZW0iOiIiLCJpZF9jb25jZWl0byI6IiIsImlkX2FuY2VzdHJhbGlkYWRlIjoiIiwiaWRfbWVzdHJlIjoiIiwiZ2Vhcl9hcm1hMSI6IiIsImdlYXJfZG1nMSI6IsKgIiwiZ2Vhcl9hcm1hMiI6IiIsImdlYXJfZG1nMiI6IsKgIiwibWVyaXRfdmFudGFnZW0iOiIiLCJtZXJpdF9kZWZlaXRvIjoiIiwibWVyaXRfbm90YXMiOiIiLCJ4cC1kb3RzIjoiMCIsImF0dHJfZm9yY2EiOiIwIiwiYXR0cl9kZXN0cmV6YSI6IjAiLCJhdHRyX3ZpZ29yIjoiMCIsImF0dHJfY2FyaXNtYSI6IjAiLCJhdHRyX21hbmlwdWxhY2FvIjoiMCIsImF0dHJfY29tcG9zdHVyYSI6IjAiLCJhdHRyX2ludGVsaWdlbmNpYSI6IjAiLCJhdHRyX3JhY2lvY2luaW8iOiIwIiwiYXR0cl9wZXJjZXBjYW8iOiIwIiwic2tfYXRsZXRpc21vIjoiMCIsInNrX2JyaWdhIjoiMCIsInNrX2VzcXVpdmEiOiIwIiwic2tfZnVydGl2aWRhZGUiOiIwIiwic2tfZXNwYWRhcyI6IjAiLCJza19hbmltYWlzIjoiMCIsInNrX2ludGltaWRhY2FvIjoiMCIsInNrX2ludHVpY2FvIjoiMCIsInNrX3BlcnN1YXNhbyI6IjAiLCJza19ldGlxdWV0YSI6IjAiLCJza19hbHF1aW1pYSI6IjAiLCJza19sb3JlIjoiMCIsInNrX21lZGljaW5hIjoiMCIsInNrX29jdWx0aXNtbyI6IjAiLCJza19yYXN0cmVhbWVudG8iOiIwIiwidmlkYS1kb3RzIjoibm9uZSxub25lLG5vbmUsbm9uZSxub25lLG5vbmUsbm9uZSxub25lLG5vbmUsbm9uZSIsIndpbGwtZG90cyI6Im5vbmUsbm9uZSxub25lLG5vbmUsbm9uZSxub25lLG5vbmUsbm9uZSxub25lLG5vbmUiLCJtYW50by1kb3RzIjoiMCIsInNpbmFpc0xpc3QiOlt7Im5hbWUiOiLCoCIsInZhbCI6IjAifSx7Im5hbWUiOiLCoCIsInZhbCI6IjAifV0sIml0ZW1zTGlzdCI6WyLCoCIsIsKgIiwiIl0sInVzZXJUaGVtZSI6InllbGxvdyIsImdlYXJfYXJtYWR1cmEiOiIiLCJnZWFyX2FicyI6IiJ9</div>
+
+<div class="crop-modal-overlay" id="crop-modal">
+  <div class="crop-container">
+    <img id="image-to-crop" src="" style="display:block; max-width:100%;">
+  </div>
+  <div class="crop-actions">
+    <button class="btn-crop btn-crop-cancel" onclick="closeCropModal()">Cancelar</button>
+    <button class="btn-crop btn-crop-save" onclick="saveCrop()">Salvar Recorte</button>
+  </div>
+</div>
+
+<div class="sheet">
+  <div class="content">
+
+    <div class="theme-selector">
+      <div class="theme-btn btn-blue" onclick="setTheme('blue', this)" title="Azul (Cinzas)"></div>
+      <div class="theme-btn btn-red" onclick="setTheme('red', this)" title="Vermelho (Sangue)"></div>
+      <div class="theme-btn btn-orange" onclick="setTheme('orange', this)" title="Laranja (Chama)"></div>
+      <div class="theme-btn btn-green" onclick="setTheme('green', this)" title="Verde (Veneno)"></div>
+      <div class="theme-btn btn-purple" onclick="setTheme('purple', this)" title="Roxo (Arcano)"></div>
+      <div class="theme-btn btn-yellow active" onclick="setTheme('yellow', this)" title="Amarelo (Luz)"></div>
+    </div>
+
+    <div class="header">
+      <div class="header-title">⚔ ASHFALL ⚔</div>
+      <div class="header-subtitle">Cinzas do Éter — Ficha de Personagem</div>
+    </div>
+
+    <div class="top-section">
+      <div class="portrait-container" onclick="document.getElementById('portrait-upload').click()">
+        <div class="btn-remove-portrait" id="btn-remove-portrait" onclick="removePortrait(event)" style="display: none;" title="Remover Foto">✖</div>
+        
+        <input type="file" id="portrait-upload" accept="image/*" style="display: none;">
+        <div class="portrait-preview" id="portrait-preview" style="background-image: none;">
+            <span class="portrait-placeholder" id="portrait-placeholder-text" style="display: block;">Clique para<br>Adicionar Retrato</span>
+        </div>
+      </div>
+      
+      <div class="identity-grid">
+        <div class="field"><span class="field-label">Nome</span><div class="field-value" id="id_nome" contenteditable="true" spellcheck="false"></div></div>
+        <div class="field"><span class="field-label">Linhagem</span><div class="field-value" id="id_linhagem" contenteditable="true" spellcheck="false"></div></div>
+        <div class="field"><span class="field-label">Conceito</span><div class="field-value" id="id_conceito" contenteditable="true" spellcheck="false"></div></div>
+        <div class="field"><span class="field-label">Ancestralidade</span><div class="field-value" id="id_ancestralidade" contenteditable="true" spellcheck="false"></div></div>
+        <div class="field"><span class="field-label">Mestre</span><div class="field-value" id="id_mestre" contenteditable="true" spellcheck="false"></div></div>
+        <div class="field"><span class="field-label">Experiência</span><div class="xp-row"><div class="dots dots-sm" id="xp-dots" data-max="10" data-val="0"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div></div>
+      </div>
+    </div>
+
+    <div class="ornament">— ✦ —</div>
+
+    <div class="section-header"><span class="icon">🌑</span> Atributos</div>
+    <div class="section-desc">Os pilares do seu ser, medidos de 1 a 5 pontos.</div>
+    <div class="attrs-grid">
+      <div class="attr-col"><div class="attr-col-title">Físicos</div><div class="attr-row"><span class="attr-name">Força</span><div class="dots" data-max="5" data-val="0" data-id="attr_forca"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="attr-row"><span class="attr-name">Destreza</span><div class="dots" data-max="5" data-val="0" data-id="attr_destreza"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="attr-row"><span class="attr-name">Vigor</span><div class="dots" data-max="5" data-val="0" data-id="attr_vigor"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div></div>
+      <div class="attr-col"><div class="attr-col-title">Sociais</div><div class="attr-row"><span class="attr-name">Carisma</span><div class="dots" data-max="5" data-val="0" data-id="attr_carisma"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="attr-row"><span class="attr-name">Manipulação</span><div class="dots" data-max="5" data-val="0" data-id="attr_manipulacao"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="attr-row"><span class="attr-name">Compostura</span><div class="dots" data-max="5" data-val="0" data-id="attr_compostura"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div></div>
+      <div class="attr-col"><div class="attr-col-title">Mentais</div><div class="attr-row"><span class="attr-name">Inteligência</span><div class="dots" data-max="5" data-val="0" data-id="attr_inteligencia"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="attr-row"><span class="attr-name">Raciocínio</span><div class="dots" data-max="5" data-val="0" data-id="attr_raciocinio"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="attr-row"><span class="attr-name">Percepção</span><div class="dots" data-max="5" data-val="0" data-id="attr_percepcao"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div></div>
+    </div>
+
+    <div class="section-header"><span class="icon">🛡️</span> Perícias</div>
+    <div class="section-desc">O treinamento nas artes da sobrevivência, guerra e erudição.</div>
+    <div class="skills-grid">
+      <div class="skill-col"><div class="skill-col-title">Talentos — Físico</div><div class="skill-row"><span class="skill-name">Atletismo</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_atletismo"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="skill-row"><span class="skill-name">Briga</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_briga"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="skill-row"><span class="skill-name">Esquiva</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_esquiva"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="skill-row"><span class="skill-name">Furtividade</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_furtividade"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="skill-row"><span class="skill-name">Manuseio de Espadas</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_espadas"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div></div>
+      <div class="skill-col"><div class="skill-col-title">Perícias — Social</div><div class="skill-row"><span class="skill-name">Adestrar Animais</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_animais"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="skill-row"><span class="skill-name">Intimidação</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_intimidacao"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="skill-row"><span class="skill-name">Intuição</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_intuicao"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="skill-row"><span class="skill-name">Persuasão</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_persuasao"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="skill-row"><span class="skill-name">Etiqueta (Cortes)</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_etiqueta"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div></div>
+      <div class="skill-col"><div class="skill-col-title">Conhecimentos — Mental</div><div class="skill-row"><span class="skill-name">Alquimia &amp; Ervas</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_alquimia"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="skill-row"><span class="skill-name">Antiguidade (Lore)</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_lore"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="skill-row"><span class="skill-name">Medicina</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_medicina"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="skill-row"><span class="skill-name">Ocultismo (Éter)</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_ocultismo"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="skill-row"><span class="skill-name">Rastreamento</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_rastreamento"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div></div>
+    </div>
+
+    <div class="section-header"><span class="icon">✨</span> Sinais e Artes do Éter</div>
+    <div class="section-desc">Poderes ancestrais que consomem a alma e moldam o mundo.</div>
+    <div class="gear-block">
+      <div id="sinais-container"><div class="sinal-row"><span class="sinal-bullet">◆</span><div class="sinal-name-area"><span style="font-family:'Cinzel',serif;font-size:11px;color:var(--smoke);letter-spacing:1px;">Sinal de</span><span class="sinal-label dynamic-input" contenteditable="true" spellcheck="false">&nbsp;</span></div><div class="dots dynamic-dots" data-max="5" data-val="0"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><span class="btn-del" title="Remover" onclick="this.parentElement.remove(); saveSheet();">✖</span></div><div class="sinal-row"><span class="sinal-bullet">◆</span><div class="sinal-name-area"><span style="font-family:'Cinzel',serif;font-size:11px;color:var(--smoke);letter-spacing:1px;">Sinal de</span><span class="sinal-label dynamic-input" contenteditable="true" spellcheck="false">&nbsp;</span></div><div class="dots dynamic-dots" data-max="5" data-val="0"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><span class="btn-del" title="Remover" onclick="this.parentElement.remove(); saveSheet();">✖</span></div></div>
+      <button class="btn-add" onclick="addSinal()">+ Adicionar Sinal</button>
+    </div>
+
+    <div class="section-header"><span class="icon">⚖️</span> Estado e Equilíbrio</div>
+    <div class="status-grid">
+      <div class="status-block"><div class="status-title">Vitalidade</div><div class="status-dots" id="vida-dots" data-val="none,none,none,none,none,none,none,none,none,none"><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div></div><div class="section-desc" style="margin:0;">Superficial / Agravado — clique para alternar</div></div>
+      <div class="status-block"><div class="status-title">Força de Vontade</div><div class="status-dots" id="will-dots" data-val="none,none,none,none,none,none,none,none,none,none"><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot"></div><div class="status-dot "></div><div class="status-dot "></div><div class="status-dot "></div><div class="status-dot "></div><div class="status-dot "></div></div><div class="section-desc" style="margin:0;">Gaste para sucessos automáticos ou resistir ao medo</div></div>
+    </div>
+    <div class="manto-container">
+      <div class="status-title">🌑 Manto de Cinzas — Corrupção do Éter</div>
+      <div class="status-dots" id="manto-dots" data-val="0" style="gap:4px;"><div class="manto-dot"></div><div class="manto-dot"></div><div class="manto-dot"></div><div class="manto-dot"></div><div class="manto-dot"></div><div class="manto-dot"></div><div class="manto-dot"></div><div class="manto-dot"></div><div class="manto-dot"></div><div class="manto-dot"></div></div>
+      <div class="section-desc" style="margin:0;">Quanto mais preenchido, mais próximo de se tornar um Espectro das Cinzas</div>
+    </div>
+
+    <div class="section-header"><span class="icon">🎒</span> Alforje e Arsenal</div>
+    <div class="gear-block">
+      <div class="gear-row"><span class="gear-label">Arma Principal</span><span class="gear-value" id="gear_arma1" contenteditable="true" spellcheck="false"></span><span class="gear-stat">Dano: <span id="gear_dmg1" contenteditable="true" spellcheck="false" style="min-width:40px;">&nbsp;</span></span></div>
+      <div class="gear-row"><span class="gear-label">Arma Secundária</span><span class="gear-value" id="gear_arma2" contenteditable="true" spellcheck="false"></span><span class="gear-stat">Dano: <span id="gear_dmg2" contenteditable="true" spellcheck="false" style="min-width:40px;">&nbsp;</span></span></div>
+      <div class="gear-row"><span class="gear-label">Armadura</span><span class="gear-value" id="gear_armadura" contenteditable="true" spellcheck="false"></span><span class="gear-stat">Absorção: <span id="gear_abs" contenteditable="true" spellcheck="false" style="min-width:40px;"></span></span></div>
+      <div style="margin-top:15px;"><span class="gear-label" style="display:block; margin-bottom:10px;">Itens Chave</span><ul class="items-list" id="items-container"><li><span class="item-input dynamic-input" contenteditable="true" spellcheck="false" style="flex:1;">&nbsp;</span><span class="btn-del" title="Remover" onclick="this.parentElement.remove(); saveSheet();">✖</span></li><li><span class="item-input dynamic-input" contenteditable="true" spellcheck="false" style="flex:1;">&nbsp;</span><span class="btn-del" title="Remover" onclick="this.parentElement.remove(); saveSheet();">✖</span></li><li><span class="item-input dynamic-input" contenteditable="true" spellcheck="false" style="flex:1;"></span><span class="btn-del" title="Remover" onclick="this.parentElement.remove(); saveSheet();">✖</span></li></ul><button class="btn-add" onclick="addItem()">+ Adicionar Item</button></div>
+    </div>
+
+    <div class="section-header"><span class="icon">📜</span> Vantagens e Defeitos</div>
+    <div class="merit-block">
+      <div class="merit-quote">"O destino é uma espada de dois gumes; um lado é a linhagem, o outro é a maldição."</div>
+      <div class="merit-row"><span class="merit-type">✦ Vantagem</span><span class="merit-value" id="merit_vantagem" contenteditable="true" spellcheck="false"></span></div>
+      <div class="merit-row"><span class="merit-type">✦ Defeito</span><span class="merit-value" id="merit_defeito" contenteditable="true" spellcheck="false"></span></div>
+      <div class="merit-row"><span class="merit-type">✦ Notas</span><span class="merit-value" id="merit_notas" contenteditable="true" spellcheck="false" style="min-height:60px;"></span></div>
+    </div>
+
+    <div class="ornament">— ✦ ⚔ ✦ —</div>
+
+    <div class="actions-container">
+      <button class="btn-action btn-pwa" id="btn-install-app" onclick="installApp()">📱 Instalar App</button>
+      <button class="btn-action" onclick="exportJSON()">Baixar Backup (.json)</button>
+      <button class="btn-action" onclick="document.getElementById('import-upload').click()">Carregar Backup (.json)</button>
+      <button class="btn-action btn-html" onclick="exportHTML()">Baixar Ficha Completa (.html)</button>
+      <input type="file" id="import-upload" accept=".json" style="display: none;">
+    </div>
+
+  </div>
+</div>
+
+<script>
+// --- LÓGICA DE PWA (INSTALAÇÃO) ---
+const manifest = {
+    name: "Ashfall RPG Ficha",
+    short_name: "Ashfall",
+    start_url: "./",
+    display: "standalone",
+    background_color: "#050505",
+    theme_color: "#050505",
+    icons: [{
+        src: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzA1MDUwNSIvPjx0ZXh0IHg9IjUwIiB5PSI2NSIgZm9udC1zaXplPSI1MCIgZm9udC1mYW1pbHk9InNlcmlmIiBmaWxsPSIjNDc4YmYxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7imZQ8L3RleHQ+PC9zdmc+",
+        sizes: "192x192 512x512",
+        type: "image/svg+xml",
+        purpose: "any maskable"
+    }]
+};
+
+const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+document.getElementById('manifest-link').href = URL.createObjectURL(manifestBlob);
+
+const swCode = `
+  self.addEventListener('install', e => self.skipWaiting());
+  self.addEventListener('activate', e => e.waitUntil(clients.claim()));
+  self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));
+`;
+const swBlob = new Blob([swCode], { type: 'application/javascript' });
+if ('serviceWorker' in navigator && window.location.protocol !== "file:") {
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob));
+}
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('btn-install-app').style.display = 'inline-block';
+});
+
+function installApp() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+            deferredPrompt = null;
+            document.getElementById('btn-install-app').style.display = 'none';
+        });
+    }
+}
+
+
+// --- LÓGICA DO CROPPER & FOTO ---
+let cropper;
+
+// Nova função para remover retrato
+function removePortrait(event) {
+    event.stopPropagation(); // Impede que abra a janela de arquivos
+    if(confirm("Deseja remover a foto do personagem?")) {
+        document.getElementById('portrait-preview').style.backgroundImage = 'none';
+        document.getElementById('portrait-placeholder-text').style.display = 'block';
+        document.getElementById('btn-remove-portrait').style.display = 'none';
+        
+        const sheetData = JSON.parse(localStorage.getItem('ashfall_save_data')) || {};
+        delete sheetData.portrait; // Remove a foto do save
+        localStorage.setItem('ashfall_save_data', JSON.stringify(sheetData));
+    }
+}
+
+document.getElementById('portrait-upload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const image = document.getElementById('image-to-crop');
+            image.src = event.target.result;
+            document.getElementById('crop-modal').style.display = 'flex';
+            if(cropper) cropper.destroy();
+            cropper = new Cropper(image, { aspectRatio: 3 / 4, viewMode: 1, dragMode: 'move', autoCropArea: 1 });
+        };
+        reader.readAsDataURL(file);
+    }
+    e.target.value = ''; 
+});
+
+function closeCropModal() { document.getElementById('crop-modal').style.display = 'none'; if(cropper) cropper.destroy(); }
+
+function saveCrop() {
+    if (!cropper) return;
+    const canvas = cropper.getCroppedCanvas({ width: 300, height: 400 });
+    const base64String = canvas.toDataURL('image/jpeg', 0.8);
+    document.getElementById('portrait-preview').style.backgroundImage = `url(${base64String})`;
+    document.getElementById('portrait-placeholder-text').style.display = 'none';
+    document.getElementById('btn-remove-portrait').style.display = 'flex'; // Mostra botão de fechar
+    
+    const sheetData = JSON.parse(localStorage.getItem('ashfall_save_data')) || {};
+    sheetData.portrait = base64String;
+    localStorage.setItem('ashfall_save_data', JSON.stringify(sheetData));
+    closeCropModal();
+}
+
+// --- EXPORTAR HTML & JSON ---
+function exportHTML() {
+    saveSheet(); 
+    const dataStr = localStorage.getItem('ashfall_save_data') || '{}';
+    const encodedData = btoa(unescape(encodeURIComponent(dataStr)));
+    const embeddedDiv = document.getElementById('embedded-data');
+    embeddedDiv.textContent = encodedData;
+    let htmlContent = document.documentElement.outerHTML;
+    embeddedDiv.textContent = '';
+    let charName = "Desconhecido";
+    try { const p = JSON.parse(dataStr); if (p.id_nome) charName = p.id_nome.trim().replace(/\s+/g, '_'); } catch (e) {}
+    const blob = new Blob([`<!DOCTYPE html>\n<html lang="pt-BR">\n` + htmlContent + `\n</html>`], { type: "text/html;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = `Ficha_Ashfall_${charName}.html`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+function exportJSON() {
+    const data = localStorage.getItem('ashfall_save_data');
+    if (!data || data === '{}') return alert("A ficha está vazia!");
+    let charName = "Desconhecido";
+    try { const p = JSON.parse(data); if (p.id_nome) charName = p.id_nome.trim().replace(/\s+/g, '_'); } catch (e) {}
+    const blob = new Blob([data], { type: "application/json" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `Backup_${charName}.json`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+document.getElementById('import-upload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        try {
+            const importedData = JSON.parse(event.target.result);
+            if (typeof importedData === 'object') {
+                localStorage.setItem('ashfall_save_data', JSON.stringify(importedData));
+                alert("Ficha carregada com sucesso!"); location.reload(); 
+            } else { alert("Arquivo inválido."); }
+        } catch (error) { alert("Erro ao ler JSON."); }
+    };
+    reader.readAsText(file); e.target.value = ''; 
+});
+
+// --- LÓGICA PRINCIPAL DA FICHA ---
+function setTheme(themeName, btnElement) {
+    document.body.setAttribute('data-theme', themeName);
+    if (btnElement) { document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active')); btnElement.classList.add('active'); }
+    const sheetData = JSON.parse(localStorage.getItem('ashfall_save_data')) || {};
+    sheetData.userTheme = themeName; localStorage.setItem('ashfall_save_data', JSON.stringify(sheetData));
+}
+
+function saveSheet() {
+    const sheetData = JSON.parse(localStorage.getItem('ashfall_save_data')) || {};
+    document.querySelectorAll('[contenteditable="true"]').forEach(el => { if (el.id && !el.classList.contains('dynamic-input')) sheetData[el.id] = el.innerText; });
+    document.querySelectorAll('[data-val]').forEach(el => { if ((el.id || el.dataset.id) && !el.classList.contains('dynamic-dots')) sheetData[el.id || el.dataset.id] = el.getAttribute('data-val'); });
+    const sinais = []; document.querySelectorAll('.sinal-row').forEach(row => { sinais.push({name: row.querySelector('.sinal-label').innerText, val: row.querySelector('.dots').getAttribute('data-val')}); }); sheetData.sinaisList = sinais;
+    const items = []; document.querySelectorAll('#items-container li').forEach(li => { items.push(li.querySelector('.item-input').innerText); }); sheetData.itemsList = items;
+    localStorage.setItem('ashfall_save_data', JSON.stringify(sheetData));
+}
+
+function addSinal(name = '', val = 0) {
+    const container = document.getElementById('sinais-container');
+    const row = document.createElement('div'); row.className = 'sinal-row';
+    row.innerHTML = `<span class="sinal-bullet">◆</span><div class="sinal-name-area"><span style="font-family:'Cinzel',serif;font-size:11px;color:var(--smoke);letter-spacing:1px;">Sinal de</span><span class="sinal-label dynamic-input" contenteditable="true" spellcheck="false">${name}</span></div><div class="dots dynamic-dots" data-max="5" data-val="${val}"></div><span class="btn-del" title="Remover" onclick="this.parentElement.remove(); saveSheet();">✖</span>`;
+    container.appendChild(row); makeDots(row.querySelector('.dots'));
+    const newInput = row.querySelector('.sinal-label'); newInput.addEventListener('input', saveSheet); newInput.addEventListener('blur', () => { if(newInput.innerHTML === '<br>') newInput.innerHTML=''; saveSheet(); });
+    saveSheet();
+}
+
+function addItem(text = '') {
+    const container = document.getElementById('items-container');
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="item-input dynamic-input" contenteditable="true" spellcheck="false" style="flex:1;">${text}</span><span class="btn-del" title="Remover" onclick="this.parentElement.remove(); saveSheet();">✖</span>`;
+    container.appendChild(li);
+    const newInput = li.querySelector('.item-input'); newInput.addEventListener('input', saveSheet); newInput.addEventListener('blur', () => { if(newInput.innerHTML === '<br>') newInput.innerHTML=''; saveSheet(); });
+    saveSheet();
+}
+
+function loadSheet() {
+    const embeddedDiv = document.getElementById('embedded-data');
+    if (embeddedDiv.textContent.trim()) {
+        try { localStorage.setItem('ashfall_save_data', decodeURIComponent(escape(atob(embeddedDiv.textContent.trim())))); embeddedDiv.textContent = ''; } catch(e) {}
+    }
+
+    const saved = localStorage.getItem('ashfall_save_data');
+    document.getElementById('sinais-container').innerHTML = ''; document.getElementById('items-container').innerHTML = '';
+    if (!saved) { addSinal(); addSinal(); addItem(); addItem(); addItem(); initialRender(); return; }
+    
+    const data = JSON.parse(saved);
+    if (data.userTheme) setTheme(data.userTheme, document.querySelector(`.btn-${data.userTheme}`));
+    
+    if (data.portrait) { 
+        document.getElementById('portrait-preview').style.backgroundImage = `url(${data.portrait})`; 
+        document.getElementById('portrait-placeholder-text').style.display = 'none'; 
+        document.getElementById('btn-remove-portrait').style.display = 'flex'; // Exibe o botão de fechar foto
+    }
+
+    for (let id in data) {
+        if(['sinaisList', 'itemsList', 'portrait', 'userTheme'].includes(id)) continue; 
+        const el = document.getElementById(id) || document.querySelector(`[data-id="${id}"]`);
+        if (el) el.hasAttribute('contenteditable') ? el.innerText = data[id].replace(/<br>/g, '') : el.setAttribute('data-val', data[id]);
+    }
+
+    if (data.sinaisList && data.sinaisList.length > 0) data.sinaisList.forEach(s => addSinal(s.name, s.val)); else { addSinal(); addSinal(); }
+    if (data.itemsList && data.itemsList.length > 0) data.itemsList.forEach(i => addItem(i)); else { addItem(); addItem(); addItem(); }
+
+    initialRender();
+}
+
+function initialRender() {
+    document.querySelectorAll('.dots:not(.dynamic-dots)').forEach(el => makeDots(el));
+    setupStatus(document.getElementById('vida-dots'), 'vitalidade');
+    setupStatus(document.getElementById('will-dots'), 'vontade');
+    setupManto(document.getElementById('manto-dots'));
+}
+
+function makeDots(container) {
+    const max = parseInt(container.dataset.max) || 5; const val = parseInt(container.getAttribute('data-val')) || 0;
+    container.innerHTML = '';
+    for (let i = 0; i < max; i++) {
+        const d = document.createElement('div'); d.className = 'dot' + (i < val ? ' filled' : '');
+        d.onclick = () => { container.setAttribute('data-val', (i + 1 === val) ? i : i + 1); makeDots(container); saveSheet(); };
+        container.appendChild(d);
+    }
+}
+
+function setupStatus(container, type) {
+    if(!container) return;
+    let states = (container.getAttribute('data-val') || "none,none,none,none,none,none,none,none,none,none").split(',');
+    container.innerHTML = '';
+    for (let i = 0; i < 10; i++) {
+        const d = document.createElement('div'); d.className = 'status-dot ' + (states[i] !== 'none' ? states[i] : '');
+        d.onclick = () => {
+            if (type === 'vitalidade') { if (!d.classList.contains('dmg') && !d.classList.contains('agg')) d.classList.add('dmg'); else if (d.classList.contains('dmg')) { d.classList.remove('dmg'); d.classList.add('agg'); } else d.classList.remove('agg'); } 
+            else d.classList.toggle('dmg');
+            container.setAttribute('data-val', Array.from(container.querySelectorAll('.status-dot')).map(dot => dot.classList.contains('dmg') ? 'dmg' : (dot.classList.contains('agg') ? 'agg' : 'none')).join(','));
+            saveSheet();
+        };
+        container.appendChild(d);
+    }
+}
+
+function setupManto(container) {
+    if(!container) return;
+    const val = parseInt(container.getAttribute('data-val')) || 0;
+    container.innerHTML = '';
+    for (let i = 0; i < 10; i++) {
+        const d = document.createElement('div'); d.className = 'manto-dot' + (i < val ? ' filled' : '');
+        d.onclick = () => { container.setAttribute('data-val', (i + 1 === val) ? i : i + 1); setupManto(container); saveSheet(); };
+        container.appendChild(d);
+    }
+}
+
+window.onload = () => {
+    loadSheet(); 
+    document.querySelectorAll('[contenteditable="true"]:not(.dynamic-input)').forEach(el => {
+        if(el.innerHTML === '<br>') el.innerHTML = ''; el.addEventListener('input', saveSheet);
+    });
+};
+</script>
+
+</body></html>
+</html>
