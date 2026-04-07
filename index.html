@@ -25,6 +25,7 @@
     --gold-dim: #1a119e; --parchment: #f2ead8; --parchment-dark: #d9ccb0;
     --smoke: #2d90a8; --dot-full: #0a5cc8; --dot-empty: rgba(255,255,255,0.05);
     --bg-panel: rgba(20, 18, 16, 0.85);
+    --tooltip-bg: rgba(10, 10, 10, 0.95);
   }
 
   /* TEMAS ALTERNATIVOS */
@@ -38,6 +39,51 @@
   body { font-family: 'Crimson Text', Georgia, serif; background-color: #050505; background-image: radial-gradient(circle at top, #141a21 0%, #050505 80%); color: var(--parchment); min-height: 100vh; overflow-x: hidden; transition: all 0.5s ease; }
   .sheet { padding: 10px; position: relative; }
   .content { position: relative; z-index: 1; padding: 25px; max-width: 900px; margin: 20px auto; background: var(--bg-panel); border: 1px solid rgba(8, 105, 122, 0.3); border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+
+  /* TOOLTIPS CSS - REFEITO PARA MOBILE FIRST */
+  .has-tooltip {
+    position: relative;
+    cursor: help;
+    display: inline-block;
+  }
+  .has-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    margin-bottom: 8px;
+    left: 0; /* Alinhamento padrão no mobile para não vazar da tela */
+    transform: translateX(0);
+    background: var(--tooltip-bg);
+    color: var(--parchment);
+    border: 1px solid var(--ember);
+    box-shadow: 0 8px 25px rgba(0,0,0,1);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: 'Crimson Text', serif;
+    font-weight: normal;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    white-space: normal;
+    width: max-content;
+    max-width: 260px;
+    text-align: left;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 999999; /* Prioridade suprema para não ser cortado */
+    pointer-events: none;
+  }
+  .has-tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+    margin-bottom: 13px; /* Efeito de elevação suave */
+  }
+
+  /* Proteção extra para tooltips muito largos no celular */
+  .status-title.has-tooltip::after {
+    max-width: 85vw; 
+  }
 
   /* SELETOR DE TEMAS */
   .theme-selector { display: flex; justify-content: center; gap: 12px; margin-bottom: 25px; }
@@ -60,12 +106,7 @@
   .portrait-container:hover .portrait-preview { filter: brightness(1.1); }
   .portrait-placeholder { font-family: 'Cinzel', serif; font-size: 10px; color: var(--smoke); text-align: center; text-transform: uppercase; letter-spacing: 2px; line-height: 1.6; pointer-events: none; }
   
-  /* BOTÃO DE REMOVER RETRATO */
-  .btn-remove-portrait {
-    position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: var(--parchment);
-    width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-size: 12px; z-index: 10; cursor: pointer; transition: all 0.2s; border: 1px solid var(--smoke);
-  }
+  .btn-remove-portrait { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: var(--parchment); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; z-index: 10; cursor: pointer; transition: all 0.2s; border: 1px solid var(--smoke); }
   .btn-remove-portrait:hover { background: #ff3333; border-color: #ff3333; color: white; transform: scale(1.1); }
 
   /* MODAL DO CROPPER */
@@ -78,21 +119,52 @@
 
   /* FIELDS & GRIDS */
   .field { border-bottom: 1px solid rgba(45, 144, 168, 0.3); padding-bottom: 5px; margin-bottom: 5px; }
-  .field-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; display: block; margin-bottom: 4px; transition: color 0.5s; }
+  .field-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; display: inline-block; margin-bottom: 4px; transition: color 0.5s; }
   [contenteditable="true"] { outline: none; min-height: 22px; border-bottom: 1px dashed transparent; transition: all 0.2s ease; padding: 2px 4px; border-radius: 3px 3px 0 0; }
   [contenteditable="true"]:hover { border-bottom: 1px dashed var(--smoke); }
   [contenteditable="true"]:focus { border-bottom: 1px solid var(--ember); background: rgba(255, 255, 255, 0.05); }
   .field-value { font-size: 15px; color: var(--parchment-dark); }
   .identity-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
   .status-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 20px; }
-  .attrs-grid, .skills-grid { display: grid; grid-template-columns: 1fr; gap: 15px; border: 1px solid var(--ember-dim); border-radius: 4px; overflow: hidden; transition: border-color 0.5s; }
+  
+  .attrs-grid, .skills-grid { display: grid; grid-template-columns: 1fr; gap: 15px; border: 1px solid var(--ember-dim); border-radius: 4px; transition: border-color 0.5s; }
 
   @media (min-width: 768px) {
     .top-section { flex-direction: row; align-items: stretch; } .portrait-container { margin: 0; flex-shrink: 0; }
     .identity-grid { grid-template-columns: 1fr 1fr; flex: 1; align-content: space-between; }
     .status-grid { grid-template-columns: 1fr 1fr; }
     .attrs-grid, .skills-grid { grid-template-columns: 1fr 1fr 1fr; gap: 0; }
-    .attr-col, .skill-col { border-right: 1px solid var(--ember-dim); border-bottom: none !important; } .attr-col:last-child, .skill-col:last-child { border-right: none; }
+    
+    /* Configurando bordas no PC */
+    .attr-col, .skill-col { border-right: 1px solid var(--ember-dim); border-bottom: none !important; }
+    .attr-col:first-child, .skill-col:first-child { border-radius: 4px 0 0 4px; }
+    .attr-col:last-child, .skill-col:last-child { border-radius: 0 4px 4px 0; border-right: none; }
+
+    /* Lógica inteligente dos tooltips apenas no PC */
+    .has-tooltip::after {
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+    .attr-col:first-child .has-tooltip::after,
+    .skill-col:first-child .has-tooltip::after,
+    .identity-grid .field:nth-child(odd) .has-tooltip::after,
+    .gear-row .has-tooltip::after,
+    .merit-row .has-tooltip::after,
+    .status-grid .status-block:first-child .has-tooltip::after {
+      left: 0;
+      transform: translateX(0);
+      text-align: left;
+    }
+    .attr-col:last-child .has-tooltip::after,
+    .skill-col:last-child .has-tooltip::after,
+    .identity-grid .field:nth-child(even) .has-tooltip::after,
+    .status-grid .status-block:last-child .has-tooltip::after {
+      left: auto;
+      right: 0;
+      transform: translateX(0);
+      text-align: right;
+    }
   }
 
   /* HEADERS, DOTS & COLUMNS */
@@ -107,11 +179,12 @@
   .attr-col:last-child, .skill-col:last-child { border-bottom: none; }
   .attr-col-title, .skill-col-title { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; text-align: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--gold-dim); text-shadow: 0 0 5px var(--gold-glow); transition: color 0.5s, border-color 0.5s; }
   .attr-row, .skill-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 4px 5px; border-radius: 3px; transition: background 0.2s; }
-  .attr-row:hover, .skill-row:hover { background: rgba(255,255,255,0.03); } .attr-name, .skill-name { font-size: 14px; color: var(--parchment-dark); flex: 1; }
+  .attr-row:hover, .skill-row:hover { background: rgba(255,255,255,0.03); } 
+  .attr-name, .skill-name { font-size: 14px; color: var(--parchment-dark); flex: 1; }
 
   /* SINAIS & STATUS */
   .sinal-row { display: flex; align-items: center; margin-bottom: 12px; gap: 10px; flex-wrap: wrap; } .sinal-name-area { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 200px; } .sinal-bullet { color: var(--ember); font-size: 14px; text-shadow: 0 0 5px var(--ember); transition: color 0.5s; } .sinal-label { font-family: 'Cinzel', serif; font-size: 12px; color: var(--gold); letter-spacing: 1px; min-width: 150px; flex: 1; transition: color 0.5s; }
-  .status-block { border: 1px solid rgba(8, 105, 122, 0.5); padding: 15px; border-radius: 4px; background: rgba(0,0,0,0.3); } .status-title { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; color: var(--ember); text-transform: uppercase; margin-bottom: 10px; transition: color 0.5s; } .status-dots { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .status-block { border: 1px solid rgba(8, 105, 122, 0.5); padding: 15px; border-radius: 4px; background: rgba(0,0,0,0.3); } .status-title { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; color: var(--ember); text-transform: uppercase; margin-bottom: 10px; transition: color 0.5s; display: inline-block;} .status-dots { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
   .status-dot { width: 26px; height: 26px; border: 1px solid var(--smoke); background: rgba(0,0,0,0.5); cursor: pointer; transition: all 0.2s; border-radius: 2px; display: flex; align-items: center; justify-content: center; } .status-dot:hover { border-color: var(--parchment); } .status-dot.dmg { background: rgba(200,82,10,0.6); border-color: #ff7b00; box-shadow: 0 0 8px rgba(200,82,10,0.4); } .status-dot.agg { background: #8b0000; border-color: #ff3333; box-shadow: inset 0 0 10px black; } .status-dot.agg::after { content: '✕'; color: white; font-size: 16px; font-weight: bold; }
   .manto-container { border: 1px solid rgba(8, 105, 122, 0.5); padding: 15px; margin-bottom: 20px; border-radius: 4px; background: rgba(20,0,0,0.2); } .manto-dot { width: 100%; max-width: 35px; height: 20px; border: 1px solid var(--smoke); background: rgba(0,0,0,0.5); cursor: pointer; transition: all 0.3s; border-radius: 2px; flex: 1; } .manto-dot.filled { background: linear-gradient(135deg, #4a0000, #800000); border-color: #ff3333; box-shadow: 0 0 10px rgba(128,0,0,0.5); }
 
@@ -173,12 +246,15 @@
       </div>
       
       <div class="identity-grid">
-        <div class="field"><span class="field-label">Nome</span><div class="field-value" id="id_nome" contenteditable="true" spellcheck="false"></div></div>
-        <div class="field"><span class="field-label">Linhagem</span><div class="field-value" id="id_linhagem" contenteditable="true" spellcheck="false"></div></div>
-        <div class="field"><span class="field-label">Conceito</span><div class="field-value" id="id_conceito" contenteditable="true" spellcheck="false"></div></div>
-        <div class="field"><span class="field-label">Ancestralidade</span><div class="field-value" id="id_ancestralidade" contenteditable="true" spellcheck="false"></div></div>
-        <div class="field"><span class="field-label">Mestre</span><div class="field-value" id="id_mestre" contenteditable="true" spellcheck="false"></div></div>
-        <div class="field"><span class="field-label">Experiência</span><div class="xp-row"><div class="dots dots-sm" id="xp-dots" data-max="10" data-val="0"></div></div></div>
+        <div class="field"><span class="field-label has-tooltip" data-tooltip="O nome verdadeiro do seu personagem ou como ele é conhecido.">Nome</span><div class="field-value" id="id_nome" contenteditable="true" spellcheck="false"></div></div>
+        <div class="field"><span class="field-label has-tooltip" data-tooltip="Sua linhagem, clã familiar ou origem do seu sangue ancestral.">Linhagem</span><div class="field-value" id="id_linhagem" contenteditable="true" spellcheck="false"></div></div>
+        <div class="field"><span class="field-label has-tooltip" data-tooltip="Um breve resumo de quem você é (Ex: Cavaleiro Arrependido, Mercenário das Cinzas).">Conceito</span><div class="field-value" id="id_conceito" contenteditable="true" spellcheck="false"></div></div>
+        <div class="field"><span class="field-label has-tooltip" data-tooltip="Sua raça ou etnia no mundo de Ashfall.">Ancestralidade</span><div class="field-value" id="id_ancestralidade" contenteditable="true" spellcheck="false"></div></div>
+        <div class="field"><span class="field-label has-tooltip" data-tooltip="Nome do Luvas.">Mestre</span><div class="field-value" id="id_mestre" contenteditable="true" spellcheck="false"></div></div>
+        <div class="field">
+          <span class="field-label has-tooltip" data-tooltip="Pontos de Experiência. Preencha conforme sobrevive a novos perigos.">Experiência</span>
+          <div class="xp-row"><div class="dots dots-sm" id="xp-dots" data-max="10" data-val="0"></div></div>
+        </div>
       </div>
     </div>
 
@@ -187,51 +263,124 @@
     <div class="section-header"><span class="icon">🌑</span> Atributos</div>
     <div class="section-desc">Os pilares do seu ser, medidos de 1 a 5 pontos.</div>
     <div class="attrs-grid">
-      <div class="attr-col"><div class="attr-col-title">Físicos</div><div class="attr-row"><span class="attr-name">Força</span><div class="dots" data-max="5" data-val="0" data-id="attr_forca"></div></div><div class="attr-row"><span class="attr-name">Destreza</span><div class="dots" data-max="5" data-val="0" data-id="attr_destreza"></div></div><div class="attr-row"><span class="attr-name">Vigor</span><div class="dots" data-max="5" data-val="0" data-id="attr_vigor"></div></div></div>
-      <div class="attr-col"><div class="attr-col-title">Sociais</div><div class="attr-row"><span class="attr-name">Carisma</span><div class="dots" data-max="5" data-val="0" data-id="attr_carisma"></div></div><div class="attr-row"><span class="attr-name">Manipulação</span><div class="dots" data-max="5" data-val="0" data-id="attr_manipulacao"></div></div><div class="attr-row"><span class="attr-name">Compostura</span><div class="dots" data-max="5" data-val="1" data-id="attr_compostura"></div></div></div>
-      <div class="attr-col"><div class="attr-col-title">Mentais</div><div class="attr-row"><span class="attr-name">Inteligência</span><div class="dots" data-max="5" data-val="1" data-id="attr_inteligencia"></div></div><div class="attr-row"><span class="attr-name">Raciocínio</span><div class="dots" data-max="5" data-val="2" data-id="attr_raciocinio"></div></div><div class="attr-row"><span class="attr-name">Percepção</span><div class="dots" data-max="5" data-val="1" data-id="attr_percepcao"></div></div></div>
+      <div class="attr-col">
+        <div class="attr-col-title">Físicos</div>
+        <div class="attr-row"><span class="attr-name has-tooltip" data-tooltip="Medida da força física, capacidade atlética de impacto e poder para erguer peso.">Força</span><div class="dots" data-max="5" data-val="0" data-id="attr_forca"></div></div>
+        <div class="attr-row"><span class="attr-name has-tooltip" data-tooltip="Rapidez, agilidade corporal e reflexos em situações de perigo.">Destreza</span><div class="dots" data-max="5" data-val="0" data-id="attr_destreza"></div></div>
+        <div class="attr-row"><span class="attr-name has-tooltip" data-tooltip="Resistência física a danos e aumento de vida.">Vigor</span><div class="dots" data-max="5" data-val="0" data-id="attr_vigor"></div></div>
+      </div>
+      <div class="attr-col">
+        <div class="attr-col-title">Sociais</div>
+        <div class="attr-row"><span class="attr-name has-tooltip" data-tooltip="Magnetismo pessoal, capacidade de liderança e charme natural.">Carisma</span><div class="dots" data-max="5" data-val="0" data-id="attr_carisma"></div></div>
+        <div class="attr-row"><span class="attr-name has-tooltip" data-tooltip="Capacidade de convencer, enganar ou direcionar os outros sem que percebam.">Manipulação</span><div class="dots" data-max="5" data-val="0" data-id="attr_manipulacao"></div></div>
+        <div class="attr-row"><span class="attr-name has-tooltip" data-tooltip="Autocontrole, tranquilidade mental e resistência a pressão ou provocações.">Compostura</span><div class="dots" data-max="5" data-val="1" data-id="attr_compostura"></div></div>
+      </div>
+      <div class="attr-col">
+        <div class="attr-col-title">Mentais</div>
+        <div class="attr-row"><span class="attr-name has-tooltip" data-tooltip="Aptidão para aprendizado, memória e conhecimento acadêmico.">Inteligência</span><div class="dots" data-max="5" data-val="1" data-id="attr_inteligencia"></div></div>
+        <div class="attr-row"><span class="attr-name has-tooltip" data-tooltip="Velocidade de raciocínio, intuição rápida e capacidade de improviso.">Raciocínio</span><div class="dots" data-max="5" data-val="2" data-id="attr_raciocinio"></div></div>
+        <div class="attr-row"><span class="attr-name has-tooltip" data-tooltip="Atenção ao ambiente, foco e capacidade de notar detalhes sutis.">Percepção</span><div class="dots" data-max="5" data-val="1" data-id="attr_percepcao"></div></div>
+      </div>
     </div>
 
     <div class="section-header"><span class="icon">🛡️</span> Perícias</div>
     <div class="section-desc">O treinamento nas artes da sobrevivência, guerra e erudição.</div>
     <div class="skills-grid">
-      <div class="skill-col"><div class="skill-col-title">Talentos — Físico</div><div class="skill-row"><span class="skill-name">Atletismo</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_atletismo"></div></div><div class="skill-row"><span class="skill-name">Briga</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_briga"></div></div><div class="skill-row"><span class="skill-name">Esquiva</span><div class="dots dots-sm" data-max="5" data-val="1" data-id="sk_esquiva"></div></div><div class="skill-row"><span class="skill-name">Furtividade</span><div class="dots dots-sm" data-max="5" data-val="1" data-id="sk_furtividade"></div></div><div class="skill-row"><span class="skill-name">Manuseio de Espadas</span><div class="dots dots-sm" data-max="5" data-val="2" data-id="sk_espadas"></div></div></div>
-      <div class="skill-col"><div class="skill-col-title">Perícias — Social</div><div class="skill-row"><span class="skill-name">Adestrar Animais</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_animais"></div></div><div class="skill-row"><span class="skill-name">Intimidação</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_intimidacao"></div></div><div class="skill-row"><span class="skill-name">Intuição</span><div class="dots dots-sm" data-max="5" data-val="1" data-id="sk_intuicao"></div></div><div class="skill-row"><span class="skill-name">Persuasão</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_persuasao"></div></div><div class="skill-row"><span class="skill-name">Etiqueta (Cortes)</span><div class="dots dots-sm" data-max="5" data-val="1" data-id="sk_etiqueta"></div></div></div>
-      <div class="skill-col"><div class="skill-col-title">Conhecimentos — Mental</div><div class="skill-row"><span class="skill-name">Alquimia & Ervas</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_alquimia"></div></div><div class="skill-row"><span class="skill-name">Antiguidade (Lore)</span><div class="dots dots-sm" data-max="5" data-val="2" data-id="sk_lore"></div></div><div class="skill-row"><span class="skill-name">Medicina</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_medicina"></div></div><div class="skill-row"><span class="skill-name">Ocultismo (Éter)</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_ocultismo"></div></div><div class="skill-row"><span class="skill-name">Rastreamento</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_rastreamento"></div></div></div>
+      <div class="skill-col">
+        <div class="skill-col-title">Talentos — Físico</div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Correr, escalar, nadar e proezas físicas gerais.">Atletismo</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_atletismo"></div></div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Combate corpo-a-corpo sem armas.">Briga</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_briga"></div></div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Sua habilidade de sair do caminho do perigo.">Esquiva</span><div class="dots dots-sm" data-max="5" data-val="1" data-id="sk_esquiva"></div></div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Mover-se em silêncio e esconder-se nas sombras.">Furtividade</span><div class="dots dots-sm" data-max="5" data-val="1" data-id="sk_furtividade"></div></div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Habilidade com lâminas curtas ou longas em combate armado.">Manuseio de Espadas</span><div class="dots dots-sm" data-max="5" data-val="2" data-id="sk_espadas"></div></div>
+      </div>
+      <div class="skill-col">
+        <div class="skill-col-title">Perícias — Social</div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Capacidade de domar, acalmar, cavalgar e falar bestas.">Adestrar Animais</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_animais"></div></div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Coagir e amedrontar através de ameaças ou presença.">Intimidação</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_intimidacao"></div></div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Ler as emoções e perceber se alguém está mentindo.">Intuição</span><div class="dots dots-sm" data-max="5" data-val="1" data-id="sk_intuicao"></div></div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Convencer os outros através de lógica, debates ou favores.">Persuasão</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_persuasao"></div></div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Saber como se portar e agir na Alta Sociedade ou Nobreza.">Etiqueta (Cortes)</span><div class="dots dots-sm" data-max="5" data-val="1" data-id="sk_etiqueta"></div></div>
+      </div>
+      <div class="skill-col">
+        <div class="skill-col-title">Conhecimentos — Mental</div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Preparo de poções, venenos e identificação de plantas.">Alquimia & Ervas</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_alquimia"></div></div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Conhecimento de lendas, história antiga e ruínas esquecidas.">Antiguidade (Lore)</span><div class="dots dots-sm" data-max="5" data-val="2" data-id="sk_lore"></div></div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Primeiros socorros, cirurgia e tratamento de doenças.">Medicina</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_medicina"></div></div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Estudo do Éter, magia arcana e criaturas sobrenaturais.">Ocultismo (Éter)</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_ocultismo"></div></div>
+        <div class="skill-row"><span class="skill-name has-tooltip" data-tooltip="Seguir pegadas, caçar e orientação no ambiente.">Rastreamento</span><div class="dots dots-sm" data-max="5" data-val="0" data-id="sk_rastreamento"></div></div>
+      </div>
     </div>
 
     <div class="section-header"><span class="icon">✨</span> Sinais e Artes do Éter</div>
     <div class="section-desc">Poderes ancestrais que consomem a alma e moldam o mundo.</div>
     <div class="gear-block">
       <div id="sinais-container"></div>
-      <button class="btn-add" onclick="addSinal()">+ Adicionar Sinal</button>
+      <button class="btn-add has-tooltip" data-tooltip="Adicione um novo poder, feitiço ou marca mágica do Éter." onclick="addSinal()">+ Adicionar Sinal</button>
     </div>
 
     <div class="section-header"><span class="icon">⚖️</span> Estado e Equilíbrio</div>
     <div class="status-grid">
-      <div class="status-block"><div class="status-title">Vitalidade</div><div class="status-dots" id="vida-dots" data-val="none,none,none,none,none,none,none,none,none,none"></div><div class="section-desc" style="margin:0;">Superficial / Agravado — clique para alternar</div></div>
-      <div class="status-block"><div class="status-title">Força de Vontade</div><div class="status-dots" id="will-dots" data-val="none,none,none,none,none,none,none,none,none,none"></div><div class="section-desc" style="margin:0;">Gaste para sucessos automáticos ou resistir ao medo</div></div>
+      <div class="status-block">
+        <div class="status-title has-tooltip" data-tooltip="Primeiro clique: Preenche a vida e a armadura. Segundo clique: Dano na armadura. Terceiro clique: Dano na vida.">Vitalidade</div>
+        <div class="status-dots" id="vida-dots" data-val="none,none,none,none,none,none,none,none,none,none"></div>
+        <div class="section-desc" style="margin:0;"></div>
+      </div>
+      <div class="status-block">
+        <div class="status-title has-tooltip" data-tooltip="Pode ser usada para remover seus status negativos/resistir ao medo.">Força de Vontade</div>
+        <div class="status-dots" id="will-dots" data-val="none,none,none,none,none,none,none,none,none,none"></div>
+        <div class="section-desc" style="margin:0;"></div>
+      </div>
     </div>
     <div class="manto-container">
-      <div class="status-title">🌑 Manto de Cinzas — Corrupção do Éter</div>
+      <div class="status-title has-tooltip" data-tooltip="A corrupção do Éter no seu corpo. Quanto mais preenchido, mais próximo de se tornar um Espectro das Cinzas.">🌑 Manto de Cinzas — Corrupção do Éter</div>
       <div class="status-dots" id="manto-dots" data-val="0" style="gap:4px;"></div>
-      <div class="section-desc" style="margin:0;">Quanto mais preenchido, mais próximo de se tornar um Espectro das Cinzas</div>
+      <div class="section-desc" style="margin:0;">A cada sessão, você pode conjurar uma quantidade X de magia sem ficar maluco, entretanto, para os sinais da “loucura” irem embora, você não pode usar mais magia nenhuma até o mestre falar que os sinais foram embora (do que em geral deve ser de uma mesa pra outra);</div>
+      <div class="section-desc" style="margin:0;">0 - 3 : danos leves;</div>
+      <div class="section-desc" style="margin:0;">4 - 7: Sintomas de confusão mental e pequenas alterações físicas;</div>
+      <div class="section-desc" style="margin:0;">8 - 9: Confusão mental completa e grande alteração no corpo;</div>
+      <div class="section-desc" style="margin:0;">10: Perdeu o personagem;</div>
     </div>
 
     <div class="section-header"><span class="icon">🎒</span> Alforje e Arsenal</div>
     <div class="gear-block">
-      <div class="gear-row"><span class="gear-label">Arma Principal</span><span class="gear-value" id="gear_arma1" contenteditable="true" spellcheck="false"></span><span class="gear-stat">Dano: <span id="gear_dmg1" contenteditable="true" spellcheck="false" style="min-width:40px;"></span></span></div>
-      <div class="gear-row"><span class="gear-label">Arma Secundária</span><span class="gear-value" id="gear_arma2" contenteditable="true" spellcheck="false"></span><span class="gear-stat">Dano: <span id="gear_dmg2" contenteditable="true" spellcheck="false" style="min-width:40px;"></span></span></div>
-      <div class="gear-row"><span class="gear-label">Armadura</span><span class="gear-value" id="gear_armadura" contenteditable="true" spellcheck="false"></span><span class="gear-stat">Absorção: <span id="gear_abs" contenteditable="true" spellcheck="false" style="min-width:40px;"></span></span></div>
-      <div style="margin-top:15px;"><span class="gear-label" style="display:block; margin-bottom:10px;">Itens Chave</span><ul class="items-list" id="items-container"></ul><button class="btn-add" onclick="addItem()">+ Adicionar Item</button></div>
+      <div class="gear-row">
+        <span class="gear-label has-tooltip" data-tooltip="Sua arma principal de combate.">Arma Principal</span>
+        <span class="gear-value" id="gear_arma1" contenteditable="true" spellcheck="false"></span>
+        <span class="gear-stat has-tooltip" data-tooltip="Bônus de dano ou dados extras fornecidos pela arma.">Dano: <span id="gear_dmg1" contenteditable="true" spellcheck="false" style="min-width:40px;"></span></span>
+      </div>
+      <div class="gear-row">
+        <span class="gear-label has-tooltip" data-tooltip="Sua arma reserva ou escudo.">Arma Secundária</span>
+        <span class="gear-value" id="gear_arma2" contenteditable="true" spellcheck="false"></span>
+        <span class="gear-stat has-tooltip" data-tooltip="Bônus de dano ou defesa fornecidos pela arma.">Dano: <span id="gear_dmg2" contenteditable="true" spellcheck="false" style="min-width:40px;"></span></span>
+      </div>
+      <div class="gear-row">
+        <span class="gear-label has-tooltip" data-tooltip="A proteção física ou mágica que você veste. Só pode te defender de um elemento.">Armadura</span>
+        <span class="gear-value" id="gear_armadura" contenteditable="true" spellcheck="false"></span>
+        <span class="gear-stat has-tooltip" data-tooltip="Quantidade de dano que esta armadura absorve ou reduz por golpe.">Absorção: <span id="gear_abs" contenteditable="true" spellcheck="false" style="min-width:40px;"></span></span>
+      </div>
+      <div style="margin-top:15px;">
+        <span class="gear-label has-tooltip" data-tooltip="Poções, chaves, relíquias e recursos vitais na sua mochila." style="display:inline-block; margin-bottom:10px;">Itens Chave</span>
+        <ul class="items-list" id="items-container"></ul>
+        <button class="btn-add has-tooltip" data-tooltip="Adicione um novo item, relíquia ou equipamento ao seu inventário." onclick="addItem()">+ Adicionar Item</button>
+      </div>
     </div>
 
     <div class="section-header"><span class="icon">📜</span> Vantagens e Defeitos</div>
     <div class="merit-block">
       <div class="merit-quote">"O destino é uma espada de dois gumes; um lado é a linhagem, o outro é a maldição."</div>
-      <div class="merit-row"><span class="merit-type">✦ Vantagem</span><span class="merit-value" id="merit_vantagem" contenteditable="true" spellcheck="false"></span></div>
-      <div class="merit-row"><span class="merit-type">✦ Defeito</span><span class="merit-value" id="merit_defeito" contenteditable="true" spellcheck="false"></span></div>
-      <div class="merit-row"><span class="merit-type">✦ Notas</span><span class="merit-value" id="merit_notas" contenteditable="true" spellcheck="false" style="min-height:60px;"></span></div>
+      <div class="merit-row">
+        <span class="merit-type has-tooltip" data-tooltip="Um traço especial ou dom que lhe favorece.">✦ Vantagem</span>
+        <span class="merit-value" id="merit_vantagem" contenteditable="true" spellcheck="false"></span>
+      </div>
+      <div class="merit-row">
+        <span class="merit-type has-tooltip" data-tooltip="Uma fobia ou limitação grave do personagem.">✦ Defeito</span>
+        <span class="merit-value" id="merit_defeito" contenteditable="true" spellcheck="false"></span>
+      </div>
+      <div class="merit-row">
+        <span class="merit-type has-tooltip" data-tooltip="Anotações gerais de campanha, objetivos ou tesouros acumulados.">✦ Notas Gerais</span>
+        <span class="merit-value" id="merit_notas" contenteditable="true" spellcheck="false" style="min-height:60px;"></span>
+      </div>
     </div>
 
     <div class="ornament">— ✦ ⚔ ✦ —</div>
@@ -379,12 +528,9 @@ document.getElementById('import-upload').addEventListener('change', function(e) 
             const importedData = JSON.parse(event.target.result);
             if (typeof importedData === 'object') {
                 localStorage.setItem('ashfall_save_data', JSON.stringify(importedData));
-                
-                // MUDANÇA: Esvazia o embedded-data na sessão atual para não sobrescrever o JSON recém carregado
                 document.getElementById('embedded-data').textContent = ''; 
-                
                 alert("Ficha carregada com sucesso!"); 
-                loadSheet(); // MUDANÇA: Chama o loadSheet direto ao invés de atualizar a página inteira
+                loadSheet(); 
             } else { alert("Arquivo inválido."); }
         } catch (error) { alert("Erro ao ler JSON."); }
     };
@@ -411,7 +557,7 @@ function saveSheet() {
 function addSinal(name = '', val = 0) {
     const container = document.getElementById('sinais-container');
     const row = document.createElement('div'); row.className = 'sinal-row';
-    row.innerHTML = `<span class="sinal-bullet">◆</span><div class="sinal-name-area"><span style="font-family:'Cinzel',serif;font-size:11px;color:var(--smoke);letter-spacing:1px;">Sinal de</span><span class="sinal-label dynamic-input" contenteditable="true" spellcheck="false">${name}</span></div><div class="dots dynamic-dots" data-max="5" data-val="${val}"></div><span class="btn-del" title="Remover" onclick="this.parentElement.remove(); saveSheet();">✖</span>`;
+    row.innerHTML = `<span class="sinal-bullet">◆</span><div class="sinal-name-area"><span style="font-family:'Cinzel',serif;font-size:11px;color:var(--smoke);letter-spacing:1px;">Sinal de</span><span class="sinal-label dynamic-input has-tooltip" data-tooltip="Digite as regras dessa magia ou feitiço aqui." contenteditable="true" spellcheck="false">${name}</span></div><div class="dots dynamic-dots" data-max="5" data-val="${val}"></div><span class="btn-del" title="Remover" onclick="this.parentElement.remove(); saveSheet();">✖</span>`;
     container.appendChild(row); makeDots(row.querySelector('.dots'));
     const newInput = row.querySelector('.sinal-label'); newInput.addEventListener('input', saveSheet); newInput.addEventListener('blur', () => { if(newInput.innerHTML === '<br>') newInput.innerHTML=''; saveSheet(); });
     saveSheet();
